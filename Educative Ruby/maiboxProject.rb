@@ -67,7 +67,7 @@ class Email
   mailbox = Mailbox.new("Ruby Study Group", emails)
   
   
-  
+  #Task 4: Mailbox Text Formatter
   class MailboxTextFormatter
     def initialize(mailbox)
       @mailbox = mailbox
