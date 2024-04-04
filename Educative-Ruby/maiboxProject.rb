@@ -105,9 +105,7 @@ class Email
     end
   end
   
-  formatter = MailboxTextFormatter.new(mailbox)
-  formatter.format
-  
+
   
   
   
