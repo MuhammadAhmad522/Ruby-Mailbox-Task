@@ -1,0 +1,13 @@
+# Ignore Ruby files
+*.rb
+
+# Ignore Ruby gem files
+*.gem
+
+# Ignore Ruby gemset files
+*.rvmrc
+*.ruby-version
+*.ruby-gemset
+
+# Ignore VSCode related files
+.vscode/
