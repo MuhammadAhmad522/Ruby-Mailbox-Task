@@ -71,7 +71,7 @@ class Email
   class MailboxTextFormatter
     def initialize(mailbox)
       @mailbox = mailbox
-      @title = mailbox.name
+      @name = mailbox.name
       calculate_max_lengths
     end
     
@@ -98,19 +98,119 @@ class Email
     end
   
     def format
-      puts "Mailbox: #{@title}\n\n"
+      puts "Mailbox: #{@name}\n\n"
       header
       rows
       footer
     end
   end
   
-  formatter = MailboxTextFormatter.new(mailbox)
-  formatter.format
+  #Task 5: Test the MailboxHtmlFormatter
+
+  class MailboxHtmlFormatter
+    def initialize(mailbox)
+      @mailbox = mailbox
+    end
+
+    def headline
+      tag(:h1, @mailbox.name)
+    end  
+
+    # enclosing head and body in html tag
+    def format
+      tag(:html, [head, body].join("\n"))
+    end
+
+    #  enclosing body tag
+    def body
+      tag(:body, [headline, table].join("\n"))
+    end
+
+    # enclosing table tag
+    def table
+      tag(:table , [thead, tbody].join("\n"))
+    end
+
+    # enclosing thead tag
+    def thead
+      tag(:thead, ths.join("\n"))
+    end  
+
+    # adding table headers
+    def ths
+      headers = ["Date", "From", "Subject"]
+      headers.map {|header_name| tag(:th, header_name)} 
+    end
+
+    # enclosing tbody tag 
+    def tbody
+      tag(:tbody, trs.join("\n"))
+    end  
+
+    # iterating table rows
+    def trs
+      rows.map { |row| tr(row) }
+    end
+
+    # enclosing table row tag
+    def tr(row)
+      tag(:tr, tds(row).join("\n"))
+    end 
+    
+    # enclosing table data tag
+    def tds(row)
+      row.collect { |content| tag(:td, content)}
+    end
+
+    # enclosing tag around content
+    def tag (name, content)
+      content = "\n#{content}\n" unless [:h1, :td, :th].include?(name)
+      html = "<#{name}>#{content}</#{name}>"
+      html = indent(html) unless name == :html
+      html
+    end
+
+    # splitting, adding 2 spaces before and then joining
+    def indent(html)
+      lines = html.split("\n")
+      lines = lines.map {|line| " " * 2 + line}
+      lines.join("\n")
+    end
+
+    # individual mail element
+    def rows
+      @mailbox.emails.map do |email|
+        [email.date, email.from, email.subject]
+      end
+    end
+    
+    
+    # html header 
+    def head
+      "<head>
+        <style>
+          table {
+            border-collapse: collapse;
+          }
+          td, th {
+            border: 1px solid black;
+            padding: 1em;
+          }
+        </style>
+      </head>"
+    end
+    
+  end
   
+  emails = [
+    Email.new("Homework this week", { :date => "2014-12-01", :from => "Ferdous"}),
+    Email.new("Keep on coding! :)", { :date => "2014-12-01", :from => "Dajana"}),
+    Email.new("Re: Homework this week", { :date => "2014-12-02", :from => "Ariane"})
+  ]
+  mailbox = Mailbox.new("Ruby Study Group", emails)
+  formatter = MailboxHtmlFormatter.new(mailbox)
   
-  
-  
+  puts formatter.format
   
   
   
