@@ -211,9 +211,7 @@ class Email
   formatter = MailboxHtmlFormatter.new(mailbox)
   
   
-  File.open('output.html', 'w') do |file|
-    file.puts formatter.format
-  end
+  File.write("emails.html", formatter.format)
   
   
   
