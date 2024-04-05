@@ -210,7 +210,11 @@ class Email
   mailbox = Mailbox.new("Ruby Study Group", emails)
   formatter = MailboxHtmlFormatter.new(mailbox)
   
-  puts formatter.format
+  
+  File.open('output.html', 'w') do |file|
+    file.puts formatter.format
+  end
+  
   
   
   
